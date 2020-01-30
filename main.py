@@ -2,18 +2,19 @@ import re
 
 from util import get_food_list_and_reduction, get_min_sum_above_floor, print_foods, print_reduction
 
-shop_code = "E3276789706198936889"
-header_dir = "./header"
-param_dir = "./param"
+shop_code = "E3276789706198936889"  # 店铺编号
+reduction_target = 35  # 满减目标
+header_dir = "./header"  # http头配置文件
+param_dir = "./param"  # url请求参数
 
-reduction_target = 35
-base_menu = ["蜜汁烤肉拌饭+4种配菜"]
-block_menu = ["纸巾", "矿泉水", "红苹果", "可乐", "美年达", "雪碧", "康师傅", "饮品"]
+base_menu = ["蜜汁烤肉拌饭+4种配菜"]  # 要求在最后的满减菜单中一定要出现的商品列表
+block_menu = ["纸巾", "矿泉水", "红苹果", "可乐", "美年达", "雪碧", "康师傅", "饮品"]  # 包含这个列表中的词组的商品一律不准出现在最后的满减菜单中
 
 food_ls, reduction_ls = get_food_list_and_reduction(shop_code=shop_code, header_dir=header_dir, param_dir=param_dir)
 for block_entry in block_menu:
     pattern = ".*" + block_entry + ".*"
     food_ls = list(filter(lambda x: not re.match(pattern, x.name), food_ls))
+
 print_reduction(reduction_ls)
 print_foods(food_ls)
 
