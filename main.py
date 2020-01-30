@@ -10,7 +10,7 @@ food_ls, reduction_ls = get_food_list_and_reduction(shop_code=shop_code, header_
 print_reduction(reduction_ls)
 print_foods(food_ls)
 
-food_ls = list(filter(lambda x: not x.no_reduction, food_ls))
+food_ls = list(filter(lambda x: not x.no_reduction and x.price != 0, food_ls))
 
 reduction_price = 0
 for floor, reduce in reduction_ls:
@@ -25,4 +25,4 @@ total /= 100
 food_suggest_ls = list(map(lambda x: food_ls[x], index_ls))
 print("===建议===")
 print_foods(food_suggest_ls)
-print("总花销：{0}-{1}={2}".format(total, reduction_price, total - reduction_price))
+print("总花销：%.2f-%.2f=%.2f" % (total, reduction_price, total - reduction_price))
