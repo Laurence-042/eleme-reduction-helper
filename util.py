@@ -15,7 +15,7 @@ def get_min_sum_above_floor(nums, floor):
         if i <= nums[0]:
             mat[0][i] = (nums[0], 0)
         else:
-            mat[0][i] = (10000, 0)
+            mat[0][i] = (100000, 0)
 
     for i in range(1, n):
         for j in range(0, floor + 1):
