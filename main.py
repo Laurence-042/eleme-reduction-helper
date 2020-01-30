@@ -1,80 +1,28 @@
-import gzip
-import io
-import json
-import os
-from urllib import request
+from util import get_food_list_and_reduction, get_min_sum_above_floor, print_foods, print_reduction
 
-
-class Food:
-    name = None
-    category = None
-    price = 0.0
-    packing_fee = 0.0
-    second_price = 0.0
-    applicable_quantity = 0
-
-    def __init__(self, name, category, price, packing_fee, second_price, applicable_quantity):
-        self.name = name
-        self.category = category
-        self.price = price
-        self.packing_fee = packing_fee
-        self.second_price = second_price
-        self.applicable_quantity = applicable_quantity
-
-
-shop_code = "E7320367095212271912"
-data_dir = "./" + shop_code + ".json"
+shop_code = "E1176052134539768938"
 header_dir = "./header"
 param_dir = "./param"
-if not os.path.exists(data_dir):
-    with open(param_dir, 'r') as f:
-        param = f.read()
-    url = "https://h5.ele.me/pizza/shopping/restaurants/" + shop_code + "/batch_shop?" + param
-    with open(header_dir, 'r') as f:
-        raw_header = f.read()
-    header = {}
-    for entry in raw_header.split('\n'):
-        k, v = entry.rsplit(':', 1)
-        header[k] = v
-    req = request.Request(url=url, headers=header)
-    response = request.urlopen(req)
-    html = gzip.GzipFile(fileobj=io.BytesIO(response.read())).read().decode("utf8")
 
-    with open(data_dir, 'w+', encoding='utf8') as f:
-        f.write(html)
+reduction_target = 38
 
-with open(data_dir, 'r', encoding='utf8') as f:
-    html = f.read()
+food_ls, reduction_ls = get_food_list_and_reduction(shop_code=shop_code, header_dir=header_dir, param_dir=param_dir)
+print_reduction(reduction_ls)
+print_foods(food_ls)
 
-data = json.loads(html)
-for activity_tag in data['rst']['activity_tags']:
-    print(activity_tag['text'])
+food_ls = list(filter(lambda x: not x.no_reduction, food_ls))
 
-foods = []
+reduction_price = 0
+for floor, reduce in reduction_ls:
+    if floor > reduction_target:
+        break
+    reduction_price = reduce
 
-for menu_entry in data['menu']:
-    category = menu_entry['name']
-    print("====" + category + "====")
+price_ls = list(map(lambda x: round(100 * (x.price + x.packing_fee)), food_ls))
+total, index_ls = get_min_sum_above_floor(price_ls, reduction_target * 100)
+total /= 100
 
-    for raw_food in menu_entry['foods']:
-        if len(raw_food['specfoods']) != 1:
-            pass  # TODO: what if amount of specfoods larger than 1?
-
-        raw_food = raw_food['specfoods'][0]
-
-        name = raw_food['name']
-        second_price = raw_food['price']
-        price = second_price
-        packing_fee = raw_food['packing_fee']
-        applicable_quantity = 1
-        if raw_food['original_price'] is not None:
-            price = raw_food['original_price']
-            applicable_quantity = raw_food['activity']['applicable_quantity']
-        food = Food(name=name, category=category, price=price, packing_fee=packing_fee, second_price=second_price,
-                    applicable_quantity=applicable_quantity)
-        foods.append(food)
-        print(food.name, food.second_price, end=' ')
-
-        print("原价", food.price, end=' ')
-        print("限{0}份".format(food.applicable_quantity), end=' ')
-        print("餐盒费", food.packing_fee)
+food_suggest_ls = list(map(lambda x: food_ls[x], index_ls))
+print("===建议===")
+print_foods(food_suggest_ls)
+print("总花销：{0}-{1}={2}".format(total, reduction_price, total - reduction_price))
