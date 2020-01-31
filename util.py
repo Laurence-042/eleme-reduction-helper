@@ -135,7 +135,8 @@ def print_foods(food_ls):
         print("餐盒费", food.packing_fee)
 
 
-def get_suggest(shop_code, reduction_target, base_menu=None, block_menu=None, header_dir = "./header", param_dir = "./param"):
+def get_suggest(shop_code, reduction_target, base_menu=None, block_menu=None, header_dir="./header",
+                param_dir="./param"):
     if base_menu is None:
         base_menu = []  # 要求在最后的满减菜单中一定要出现的商品列表
     if block_menu is None:
@@ -170,6 +171,9 @@ def get_suggest(shop_code, reduction_target, base_menu=None, block_menu=None, he
     index_ls, total = get_min_sum_above_floor(price_ls, round((reduction_target - base_price) * 100))
     total /= 100
     total += base_price
+
+    total = round(total, 2)
+    reduction_price = round(reduction_price, 2)
 
     food_suggest_ls = list(map(lambda x: food_ls[x], index_ls))
     food_suggest_ls += base_food_ls

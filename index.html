@@ -31,7 +31,12 @@
                     type: "GET",
                     // dataType: "jsonp",  //指定服务器返回的数据类型
                     // jsonpCallback: "showData",  //指定回调函数名称
-
+                    data:{
+                        shop_code:"E3276789706198936889",
+                        reduction_target:"35",
+                        base_menu:"蜜汁烤肉拌饭+4种配菜",
+                        block_menu:"纸巾,矿泉水,红苹果,可乐,美年达,雪碧,康师傅,饮品"
+                    },
                     success: function (data) {
                         showData(data)
                         console.info("调用success");
