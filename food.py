@@ -15,3 +15,15 @@ class Food:
         self.second_price = second_price
         self.applicable_quantity = applicable_quantity
         self.no_reduction = no_reduction
+
+    def as_dict(self):
+        res = {
+            "name": self.name,
+            "category": self.category,
+            "price": self.price,
+            "packing_fee": self.packing_fee,
+            "second_price": self.second_price,
+            "applicable_quantity": self.applicable_quantity,
+            "no_reduction": self.no_reduction
+        }
+        return res

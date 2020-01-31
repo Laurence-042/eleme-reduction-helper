@@ -2,6 +2,7 @@ import gzip
 import io
 import json
 import os
+import re
 from urllib import request
 
 from food import Food
@@ -55,7 +56,7 @@ def get_min_sum_above_floor(nums, floor):
             continue
     goods = sorted(goods)
 
-    return total, goods
+    return goods, total
 
 
 def get_food_list_and_reduction(shop_code, header_dir, param_dir):
@@ -132,3 +133,47 @@ def print_foods(food_ls):
         print("原价", food.price, end=' ')
         print("限{0}份".format(food.applicable_quantity), end=' ')
         print("餐盒费", food.packing_fee)
+
+
+def get_suggest(shop_code, reduction_target, base_menu=None, block_menu=None, header_dir = "./header", param_dir = "./param"):
+    if base_menu is None:
+        base_menu = []  # 要求在最后的满减菜单中一定要出现的商品列表
+    if block_menu is None:
+        block_menu = ["纸巾", "矿泉水", "红苹果", "可乐", "美年达", "雪碧", "康师傅", "饮品"]  # 包含这个列表中的词组的商品一律不准出现在最后的满减菜单中
+
+    food_ls, reduction_ls = get_food_list_and_reduction(shop_code=shop_code, header_dir=header_dir, param_dir=param_dir)
+    for block_entry in block_menu:
+        pattern = ".*" + block_entry + ".*"
+        food_ls = list(filter(lambda x: not re.match(pattern, x.name), food_ls))
+
+    # print_reduction(reduction_ls)
+    # print_foods(food_ls)
+
+    food_ls = list(filter(lambda x: not x.no_reduction and x.price != 0, food_ls))
+    base_food_ls = list(filter(lambda x: x.name in base_menu, food_ls))
+
+    base_price = 0
+    for base_food in base_food_ls:
+        base_price += base_food.price
+        food_ls.remove(base_food)
+
+    reduction_price = 0
+    for floor, reduce in reduction_ls:
+        if floor > reduction_target:
+            break
+        reduction_price = reduce
+
+    if base_price > reduction_target:
+        return base_food_ls, base_price, reduction_price
+
+    price_ls = list(map(lambda x: round(100 * (x.price + x.packing_fee)), food_ls))
+    index_ls, total = get_min_sum_above_floor(price_ls, round((reduction_target - base_price) * 100))
+    total /= 100
+    total += base_price
+
+    food_suggest_ls = list(map(lambda x: food_ls[x], index_ls))
+    food_suggest_ls += base_food_ls
+    # print("===建议===")
+    # print_foods(food_suggest_ls)
+    # print("总花销：%.2f-%.2f=%.2f" % (total, reduction_price, total - reduction_price))
+    return food_suggest_ls, total, reduction_price
