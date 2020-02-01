@@ -9,12 +9,17 @@ var demo = new Vue({
     reduction_target: 35,
     base_menu: '蜜汁烤肉拌饭+4种配菜',
     block_menu: '纸巾,矿泉水,红苹果,可乐,美年达,雪碧,康师傅,饮品',
-    suggest: ''
+    suggest: null,
+    got_suggest: false
   },
   mounted() {
   },
   methods: {
     get_suggest(e = undefined) {
+      TweenLite.to("#card-list", 0.5, {
+        top: "-500%",
+      });
+
       var that = this;
       axios.get('http://localhost:8080/eleme', {
         params: {
@@ -41,26 +46,49 @@ var demo = new Vue({
         })
     },
     get_bill(foods, total, reducetion) {
-      var category = "";
-      suggest = "";
+      var category = '';
+      var suggest = {};
+      suggest.entries = []
+      var entry = {}
       foods.forEach(food => {
         if (food.category != category) {
           category = food.category;
-          suggest += "====" + category + "====\n";
+          entry={};
+          entry.category = "=="+category+"==";
+          entry.foods = [];
+          suggest.entries.push(entry)
         }
-        suggest += food.name + " " + food.price + " 餐盒费：" + food.packing_fee + "\n";
+        entry.foods.push({"name":food.name,"price":food.price,"packing_fee":food.packing_fee})
       });
-      suggest += "\n";
-      suggest += "总花销：" + total + "-" + reducetion + "=" + (total - reducetion).toFixed(2);
+      suggest.total ="总花销：" + total + "-" + reducetion + "=" + (total - reducetion).toFixed(2);
       this.suggest = suggest;
+      this.got_suggest = true;
+
+      setTimeout(function () {
+        TweenLite.to("#card-list", 0.5, {
+          top: "0em",
+        });
+      }, 500);
+
+
     },
-    clear_suggest(){
-      this.suggest = "";
+    clear_suggest() {
+      var that = this;
+      var tl = new TimelineLite();
+
+      tl.to("#card-list", 0.5, {
+        top: "-50em",
+        onComplete: function () {
+          that.got_suggest = false;
+          that.suggest = null;
+        }
+      });
+      tl.to("#card-list", 0.5, {
+        top: "0em",
+      });
     },
-    copy_url(e = undefined) {
-      console.log(e);
-      console.log(e.target);
-      var text = e.target.innerText;
+    copy_suggest(e ) {
+      var text = document.querySelector("#suggest").innerText;
       var input = document.getElementById("copy-helper");
       input.value = text; // 修改文本框的内容
       input.select(); // 选中文本

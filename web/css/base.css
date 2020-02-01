@@ -1,56 +1,134 @@
-body{
-    background: #2b2b2b;
+body {
+    background: #eee;
 }
 
-#center-wrapper{
+#top-background-0 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5%;
+    width: 100%;
+    background-image: linear-gradient(to right, #66ccff, #ee82ee);
+
+    z-index: 1;
+}
+
+#top-background-1 {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    height: 5%;
+    width: 100%;
+    background-image: linear-gradient(to right, #66ccff, #ee82ee);
+    box-shadow: 0 0.5em 1em #ccc;
+
+    z-index: -1;
+}
+
+.center-wrapper {
+    position: absolute;
     top: 3em;
+    left: 0;
+    right: 0;
     margin: auto;
-    padding: 1em;
 
     width: 80%;
+    height: 95%;
+    overflow-y: scroll;
 
-    background: #444444;
+    box-shadow: inset 0 1em 1em -1em #444;
+    ;
+
     display: flex;
     flex-direction: column;
 
 }
 
 
-#key-input-wrapper {
-    background-color: gray;
+.card-list-wrapper {
+    position: relative;
+
+    background-color: #666;
     display: flex;
     flex-direction: column;
-    
+
     padding: 1em;
+    margin: 0 1em;
+}
+
+.card {
+    width: 90%;
+    margin: 5%;
+    border-radius: 0.3em;
 }
 
 input {
-    margin: 1em;
     padding: 1em;
     font-size: large;
 }
 
-#search-button,#clear-button {
-    margin: 1em;
+textarea {
     padding: 1em;
     font-size: large;
 }
 
-#suggest-wrpper {
-    background-color: gray;
+#search-button,
+#clear-button {
+    padding: 1em;
+    font-size: large;
+}
 
-    word-break:break-all;
-    text-align: center;
-    white-space: pre-wrap;
+.hint{
+    background-color: #ccc;
+    font-size: large;
+    padding: 0.3em;
 }
 
 #suggest {
     background-color: lightgrey;
     margin: 0.5em 0.5em;
     padding: 0.5em 0.5em;
+
+    white-space: pre-wrap
 }
 
-#search_format-input{
-    grid-column: 1 / 4;
-    grid-row: 3;
+.suggest-entry {
+    text-align: center;
+    margin: 0;
+    border-bottom: solid;
+    border-color: #444;
+}
+
+.food-entry{
+    padding: 0.3em;
+
+    border-bottom: dotted;
+    border-color: #444;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.suggest-entry-category {
+    font-size: large;
+    margin: 0.3em 0 0 0;
+}
+
+.food-entry-left {
+    align-self: center;
+    font-size: larger;
+
+    grid-column: 1;
+    grid-row: 1/3;
+}
+
+.food-entry-top-right {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.food-entry-bottom-right {
+    grid-column: 2;
+    grid-row: 2;
 }
