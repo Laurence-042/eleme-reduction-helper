@@ -153,7 +153,7 @@ def get_suggest(shop_code, reduction_target, base_menu=None, block_menu=None, he
 
     base_price = 0
     for base_food in base_food_ls:
-        base_price += base_food.price
+        base_price += base_food.price + base_food.packing_fee
         food_ls.remove(base_food)
 
     reduction_price = 0
