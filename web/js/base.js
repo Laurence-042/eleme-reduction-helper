@@ -61,6 +61,19 @@ var demo = new Vue({
         entry.foods.push({"name":food.name,"price":food.price,"packing_fee":food.packing_fee})
       });
       suggest.total ="总花销：" + total + "-" + reducetion + "=" + (total - reducetion).toFixed(2);
+
+      var format_suggest = ""
+      suggest.entries.forEach(entry=>{
+        format_suggest += "=="+entry.category+"==\n";
+        entry.foods.forEach(food=>{
+          format_suggest += food.name + ' ';
+          format_suggest += "单价：" + food.price + ' ';
+          format_suggest += "包装费：" + food.packing_fee + '\n';
+        });
+      });
+      format_suggest += '\n' + suggest.total;
+      suggest.format = format_suggest;
+
       this.suggest = suggest;
       this.got_suggest = true;
 
@@ -104,8 +117,8 @@ var demo = new Vue({
         top: "0em",
       });
     },
-    copy_suggest(e ) {
-      var text = document.querySelector("#suggest").innerText;
+    copy_suggest(e) {
+      var text = this.suggest.format;
       var input = document.getElementById("copy-helper");
       input.value = text; // 修改文本框的内容
       input.select(); // 选中文本
