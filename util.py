@@ -59,12 +59,11 @@ def get_min_sum_above_floor(nums, floor):
     return goods, total
 
 
-def get_food_list_and_reduction(shop_code, header_dir, param_dir):
+def get_food_list_and_reduction(shop_code, header_dir):
     data_dir = "./" + shop_code + ".json"
+    param = "extras=[\"activities\",\"albums\",\"license\",\"identification\",\"qualification\"]"
 
     if not os.path.exists(data_dir):
-        with open(param_dir, 'r') as f:
-            param = f.read()
         url = "https://h5.ele.me/pizza/shopping/restaurants/" + shop_code + "/batch_shop?" + param
         with open(header_dir, 'r') as f:
             raw_header = f.read()
@@ -135,14 +134,13 @@ def print_foods(food_ls):
         print("餐盒费", food.packing_fee)
 
 
-def get_suggest(shop_code, reduction_target, base_menu=None, block_menu=None, header_dir="./header",
-                param_dir="./param"):
+def get_suggest(shop_code, reduction_target, base_menu=None, block_menu=None, header_dir="./config/header"):
     if base_menu is None:
         base_menu = []  # 要求在最后的满减菜单中一定要出现的商品列表
     if block_menu is None:
         block_menu = ["纸巾", "矿泉水", "红苹果", "可乐", "美年达", "雪碧", "康师傅", "饮品"]  # 包含这个列表中的词组的商品一律不准出现在最后的满减菜单中
 
-    food_ls, reduction_ls = get_food_list_and_reduction(shop_code=shop_code, header_dir=header_dir, param_dir=param_dir)
+    food_ls, reduction_ls = get_food_list_and_reduction(shop_code=shop_code, header_dir=header_dir)
     for block_entry in block_menu:
         pattern = ".*" + block_entry + ".*"
         food_ls = list(filter(lambda x: not re.match(pattern, x.name), food_ls))

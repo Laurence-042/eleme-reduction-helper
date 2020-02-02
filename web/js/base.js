@@ -5,9 +5,9 @@ function sleep(ms) {
 var demo = new Vue({
   el: '#demo',
   data: {
-    shop_code: 'E3276789706198936889',
-    reduction_target: 35,
-    base_menu: '蜜汁烤肉拌饭+4种配菜',
+    shop_code: 'E10538147636171159542',
+    reduction_target: 38,
+    base_menu: '招牌香辣鸡腿堡',
     block_menu: '纸巾,矿泉水,红苹果,可乐,美年达,雪碧,康师傅,饮品',
     suggest: null,
     got_suggest: false
@@ -21,7 +21,7 @@ var demo = new Vue({
       });
 
       var that = this;
-      axios.get('http://localhost:8080/eleme', {
+      axios.get('http://localhost:9043/eleme', {
         params: {
           shop_code: that.shop_code,
           reduction_target: that.reduction_target,
@@ -33,7 +33,7 @@ var demo = new Vue({
           var data = response.data;
 
           if (data.errMsg != null) {
-            that.suggest = data.errMsg;
+            that.handle_exception(data);
             return;
           }
 
@@ -69,8 +69,25 @@ var demo = new Vue({
           top: "0em",
         });
       }, 500);
+    },
+    handle_exception(err){
+      console.log(err);
 
+      var suggest = {};
+      suggest.entries = [];
+      suggest.entries.push({category:"发生了错误，可能原因如下"})
+      err.reason.forEach(reason => {
+        suggest.entries.push({category:reason})
+      });
+      suggest.total = err.errMsg;
+      this.suggest = suggest;
+      this.got_suggest = true;
 
+      setTimeout(function () {
+        TweenLite.to("#card-list", 0.5, {
+          top: "0em",
+        });
+      }, 500);
     },
     clear_suggest() {
       var that = this;

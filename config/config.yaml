@@ -1,0 +1,6 @@
+use_ssl: false
+domain_srv_crt_dir: "/etc/nginx/1_www.laurence042.com_bundle.crt"
+domain_srv_key_dir: "/etc/nginx/2_www.laurence042.com.key"
+header_dir: "./config/header"
+host: "127.0.0.1"
+port: 9043
