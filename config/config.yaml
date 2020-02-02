@@ -1,6 +1,6 @@
-use_ssl: false
-domain_srv_crt_dir: "/etc/nginx/1_www.laurence042.com_bundle.crt"
-domain_srv_key_dir: "/etc/nginx/2_www.laurence042.com.key"
-header_dir: "./config/header"
-host: "127.0.0.1"
-port: 9043
+use_ssl: false # 是否使用ssl，如果为true则需要设置以下两条为对应路径
+domain_srv_crt_dir: "/etc/nginx/1_www.laurence042.com_bundle.crt" # https所需的证书文件之一，从你的证书提供商处获取或者自己签一个
+domain_srv_key_dir: "/etc/nginx/2_www.laurence042.com.key" # 同上
+header_dir: "./config/header" # 存储登录信息的文件的路径
+host: "127.0.0.1" # host，不用改
+port: 9043 # 端口号，不要设为22，80，8080等有其他用途或已被占用的端口，不要忘记设置防火墙打开相应的端口
