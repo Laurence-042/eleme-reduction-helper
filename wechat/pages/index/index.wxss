@@ -1,0 +1,89 @@
+/**index.wxss**/
+
+.top-background-0 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 5vh;
+  width: 100vh;
+  background: linear-gradient(to right, #6cf, #ee82ee);
+  z-index: 1;
+}
+
+.top-background-1 {
+  position: absolute;
+  bottom: 5vh;
+  left: 0;
+  height: 5vh;
+  width: 100vh;
+  background: linear-gradient(to right, #6cf, #ee82ee);
+  box-shadow: 0 -0.5em 1em #ccc;
+  z-index: -1;
+}
+
+.inner-container {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  bottom: 8vh;
+  box-shadow: inset 0 -1vh 1vh -1vh #444;
+  height: 92vh;
+  width: 90%;
+}
+
+.wrapper {
+  background: #666;
+  width: 90%;
+  height: 92vh;
+  margin: auto;
+}
+
+.card {
+  width: 80%;
+  margin: 3vh auto;
+  border-radius: 0.3em;
+}
+
+.section__title {
+  background: #ccc;
+  padding: 1vh;
+  font-size: x-large;
+}
+
+input {
+  background: white;
+  padding: 1vh;
+  font-size: large;
+}
+
+button {
+  padding: 1em;
+  font-size: large;
+}
+
+.suggest-list {
+  background-color: lightgrey;
+  margin: 0.5em 0.5em;
+  padding: 0.5em 0.5em;
+  white-space: pre-wrap;
+  border-radius: 0.3em;
+}
+
+.suggest-entry {
+  text-align: center;
+  border-bottom: solid;
+  border-color: #444;
+}
+
+.suggest-entry-category {
+  font-size: large;
+  margin: 0.3em 0 0 0;
+}
+
+.food-entry {
+  font-size: large;
+  padding: 0.3em;
+  border-bottom: dotted;
+  border-color: #444;
+}

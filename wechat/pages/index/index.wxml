@@ -1,0 +1,42 @@
+<!--index.wxml-->
+<view class="top-background-0"></view>
+<view class="top-background-1"></view>
+<view class="inner-container">
+  <scroll-view scroll-y="true" class="wrapper">
+    <form wx:if="{{!got_suggest}}" bindsubmit="get_suggest">
+      <view class="section">
+        <view class="section__title card">商店ID</view>
+        <input class="card" name="shop_code" value="{{shop_code}}" />
+      </view>
+      <view class="section">
+        <view class="section__title card">满减目标</view>
+        <input class="card" name="reduction_target" type="number" value="{{reduction_target}}" />
+      </view>
+      <view class="section">
+        <view class="section__title card">必选菜品</view>
+        <input class="card" name="base_menu" value="{{base_menu}}" />
+      </view>
+      <view class="section">
+        <view class="section__title card">黑名单</view>
+        <input class="card" name="block_menu" value="{{block_menu}}" />
+      </view>
+      <view class="btn-area">
+        <button class="card" formType="submit">Submit</button>
+        <button class="card" formType="reset">Reset</button>
+      </view>
+    </form>
+
+    <view class="suggest-list" wx:else bindtap="copy_suggest">
+      <view class="suggest-entry card" wx:for="{{suggest.entries}}" wx:for-index="category" wx:for-item="entry">
+        <view class="suggest-entry-category">=={{category}}==</view>
+        <view class="food-entry" wx:for="{{entry}}" wx:for-index="food_idx" wx:for-item="food">
+          <view>{{food.name}}</view>
+          <view>单价：{{food.price}}</view>
+          <view>包装费：{{food.packing_fee}}</view>
+        </view>
+      </view>
+      <view class="card">{{suggest.total}}</view>
+      <button bindtap="clear_suggest">再来一单</button>
+    </view>
+  </scroll-view>
+</view>
